@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
+use App\Models\Branch;
+use App\Http\Controllers\BranchController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -32,13 +35,27 @@ Route::get('/dashboard', function () {
 
 })->middleware(['auth'])->name('dashboard');
 
-Route::middleware(['auth', 'role:owner'])->group(function () {
+Route::middleware(['auth', 'role:owner'])
+    ->prefix('owner')
+    ->name('owner.')
+    ->group(function () {
 
-    Route::get('/owner/dashboard', function () {
-        return view('owner.dashboard');
+        Route::get('/dashboard', function () {
+
+            $totalBranches = \App\Models\Branch::count();
+
+            $totalUsers = \App\Models\User::count();
+
+            return view('owner.dashboard', compact(
+                'totalBranches',
+                'totalUsers'
+            ));
+
+        })->name('dashboard');
+
+        Route::resource('branches', BranchController::class);
+
     });
-
-});
 
 Route::middleware(['auth', 'role:manager'])->group(function () {
 
