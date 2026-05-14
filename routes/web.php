@@ -35,7 +35,7 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'role:owner'])->group(function () {
 
     Route::get('/owner/dashboard', function () {
-        return 'Dashboard Owner';
+        return view('owner.dashboard');
     });
 
 });
@@ -43,7 +43,7 @@ Route::middleware(['auth', 'role:owner'])->group(function () {
 Route::middleware(['auth', 'role:manager'])->group(function () {
 
     Route::get('/manager/dashboard', function () {
-        return 'Dashboard Manager';
+        return view('manager.dashboard');
     });
 
 });
@@ -51,7 +51,7 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
 Route::middleware(['auth', 'role:supervisor'])->group(function () {
 
     Route::get('/supervisor/dashboard', function () {
-        return 'Dashboard Supervisor';
+        return view('supervisor.dashboard');
     });
 
 });
@@ -59,7 +59,7 @@ Route::middleware(['auth', 'role:supervisor'])->group(function () {
 Route::middleware(['auth', 'role:cashier'])->group(function () {
 
     Route::get('/cashier/dashboard', function () {
-        return 'Dashboard Cashier';
+        return view('cashier.dashboard');
     });
 
 });
@@ -67,8 +67,16 @@ Route::middleware(['auth', 'role:cashier'])->group(function () {
 Route::middleware(['auth', 'role:warehouse'])->group(function () {
 
     Route::get('/warehouse/dashboard', function () {
-        return 'Dashboard Warehouse';
+        return view('warehouse.dashboard');
     });
+
+});
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/profile', function () {
+        return view('profile.edit');
+    })->name('profile.edit');
 
 });
 
