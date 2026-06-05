@@ -1,11 +1,22 @@
-<div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+<?php
 
-    <h2 class="text-lg font-bold text-gray-700">
-        {{ $title }}
-    </h2>
+namespace App\View\Components;
 
-    <p class="mt-4 text-3xl font-bold text-gray-900">
-        {{ $slot }}
-    </p>
+use Closure;
+use Illuminate\Contracts\View\View;
+use Illuminate\View\Component;
 
-</div>
+class DashboardCard extends Component
+{
+    public $title;
+
+    public function __construct($title)
+    {
+        $this->title = $title;
+    }
+
+    public function render(): View|Closure|string
+    {
+        return view('components.dashboard-card');
+    }
+}

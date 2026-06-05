@@ -35,5 +35,15 @@ class User extends Authenticatable
         return $this->belongsTo(Branch::class);
     }
 
+    public function stockMovements()
+    {
+        return $this->hasMany(StockMovement::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
     
 }
