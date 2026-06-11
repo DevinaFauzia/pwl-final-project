@@ -12,6 +12,9 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            @if(isset($branchName) && $branchName)
+                <div class="mb-6 rounded-2xl border border-gray-200 bg-white p-4 text-sm text-gray-600 shadow-sm">Cabang: <span class="font-semibold text-gray-900">{{ $branchName }}</span></div>
+            @endif
             <div class="mb-6 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                 <p class="text-sm text-gray-500">Jumlah Item Stok Cabang</p>
                 <p class="mt-2 text-3xl font-semibold text-gray-900">{{ number_format($totalStocks, 0, ',', '.') }}</p>

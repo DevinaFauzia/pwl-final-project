@@ -15,6 +15,11 @@ class ReportController extends Controller
     public function transactions(Request $request)
     {
         $user = Auth::user();
+
+        if ($user->role === 'manager' && !$user->branch_id) {
+            return redirect()->route('manager.dashboard')->with('error', 'Akun manager belum dikaitkan dengan cabang. Hubungi admin.');
+        }
+
         $query = Transaction::with(['branch', 'user', 'details.product']);
 
         if ($user->role === 'manager') {
@@ -45,6 +50,11 @@ class ReportController extends Controller
     public function stocks(Request $request)
     {
         $user = Auth::user();
+
+        if ($user->role === 'manager' && !$user->branch_id) {
+            return redirect()->route('manager.dashboard')->with('error', 'Akun manager belum dikaitkan dengan cabang. Hubungi admin.');
+        }
+
         $query = ProductStock::with(['product', 'branch']);
 
         if ($user->role === 'manager') {
@@ -60,6 +70,7 @@ class ReportController extends Controller
 
         $viewPath = $user->role === 'owner' ? 'owner.reports.stocks' : 'manager.reports.stocks';
 
-        return view($viewPath, compact('stocks', 'branches', 'totalStocks', 'criticalStockCount'));
+        $branchName = $user->branch?->name;
+        return view($viewPath, compact('stocks', 'branches', 'totalStocks', 'criticalStockCount', 'branchName'));
     }
 }

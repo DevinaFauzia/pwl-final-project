@@ -30,7 +30,7 @@
                                 required>
                                 <option value="">-- Pilih Produk --</option>
                                 @foreach($products as $product)
-                                    <option value="{{ $product->id }}" {{ old('product_id') == $product->id ? 'selected' : '' }}>{{ $product->sku }} - {{ $product->name }}</option>
+                                    <option value="{{ $product->id }}" {{ old('product_id') == $product->id ? 'selected' : '' }}>{{ $product->sku }} - {{ $product->name }} @if($product->category) ({{ $product->category->name }}) @endif</option>
                                 @endforeach
                             </select>
                         </div>

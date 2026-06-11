@@ -65,7 +65,6 @@ class BranchController extends Controller
         return view('branches.edit', compact('branch'));
     }
 
-
     /**
      * Update the specified resource in storage.
      */
@@ -103,3 +102,4 @@ class BranchController extends Controller
             ->with('success', 'Cabang berhasil dihapus');
     }
 }
+

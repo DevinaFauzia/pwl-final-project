@@ -10,6 +10,9 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            @if(isset($branchName) && $branchName)
+                <div class="mb-6 rounded-2xl border border-gray-200 bg-white p-4 text-sm text-gray-600 shadow-sm">Cabang: <span class="font-semibold text-gray-900">{{ $branchName }}</span></div>
+            @endif
             
             <div class="grid gap-4 mb-6 md:grid-cols-2">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">

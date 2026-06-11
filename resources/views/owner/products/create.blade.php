@@ -45,6 +45,16 @@
                 </div>
 
                 <div>
+                    <label for="category_id" class="block text-sm font-bold text-gray-700 mb-1">Kategori Produk</label>
+                    <select name="category_id" id="category_id" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm sm:text-sm" required>
+                        <option value="">-- Pilih Kategori --</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
                     <label for="name" class="block text-sm font-bold text-gray-700 mb-1">Nama Produk</label>
                     <input type="text" name="name" id="name" value="{{ old('name') }}" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm sm:text-sm" placeholder="Masukkan nama lengkap produk..." required>
                 </div>

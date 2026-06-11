@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
             'email' => 'manager@sijaya.com',
             'password' => Hash::make('password'),
             'role' => 'manager',
+            'branch_id' => 1,
         ]);
 
         User::create([
@@ -30,6 +31,7 @@ class UserSeeder extends Seeder
             'email' => 'supervisor@sijaya.com',
             'password' => Hash::make('password'),
             'role' => 'supervisor',
+            'branch_id' => 1,
         ]);
 
         User::create([
@@ -37,6 +39,7 @@ class UserSeeder extends Seeder
             'email' => 'cashier@sijaya.com',
             'password' => Hash::make('password'),
             'role' => 'cashier',
+            'branch_id' => 1,
         ]);
 
         User::create([
@@ -44,6 +47,7 @@ class UserSeeder extends Seeder
             'email' => 'warehouse@sijaya.com',
             'password' => Hash::make('password'),
             'role' => 'warehouse',
+            'branch_id' => 1,
         ]);
     }
 

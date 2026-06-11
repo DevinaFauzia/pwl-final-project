@@ -30,14 +30,25 @@
                             <h3 class="text-lg font-semibold text-gray-700">Pilih Barang</h3>
                             <p class="text-sm text-gray-500">Kasir: {{ $cashierName }}</p>
                         </div>
-                        <form action="{{ route('cashier.pos.create') }}" method="GET" class="w-full sm:w-auto">
-                            <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nama atau SKU" class="w-full sm:w-72 rounded-lg border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500" />
+                        <form action="{{ route('cashier.pos.create') }}" method="GET" class="w-full sm:w-auto grid grid-cols-1 gap-2 sm:grid-cols-2">
+                            <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nama atau SKU" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500" />
+                            <select name="category_id" onchange="this.form.submit()" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500">
+                                <option value="">Semua Kategori</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                @endforeach
+                            </select>
                         </form>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-96 overflow-y-auto pr-2">
                         @forelse($stocks as $stock)
                             <div class="border border-gray-200 rounded-xl p-4 hover:border-indigo-500 cursor-pointer transition" onclick="addToCart({{ $stock->product->id }}, '{{ $stock->product->name }}', {{ $stock->product->price }}, {{ $stock->stock }})">
-                                <div class="font-bold text-gray-800">{{ $stock->product->name }}</div>
+                                <div class="flex items-center justify-between gap-2">
+                                    <div class="font-bold text-gray-800">{{ $stock->product->name }}</div>
+                                    @if($stock->product->category)
+                                        <span class="text-xs uppercase tracking-wide text-slate-500 bg-slate-100 px-2 py-1 rounded-full">{{ $stock->product->category->name }}</span>
+                                    @endif
+                                </div>
                                 <div class="text-xs uppercase tracking-wide text-slate-400">{{ $stock->product->sku }}</div>
                                 <div class="text-sm text-gray-500 mt-2">Stok tersedia: {{ $stock->stock }}</div>
                                 <div class="mt-2 text-indigo-600 font-semibold">Rp {{ number_format($stock->product->price, 0, ',', '.') }}</div>
@@ -63,8 +74,8 @@
                         <div class="space-y-4 mb-4">
                             <div class="grid grid-cols-1 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Jumlah Bayar (opsional)</label>
-                                    <input id="payment-amount" type="number" min="0" step="1000" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500" placeholder="Masukkan jumlah uang pelanggan" oninput="updatePayment()" />
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Jumlah Bayar</label>
+                                    <input id="payment-amount" type="number" min="0" step="1000" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500" placeholder="Masukkan jumlah uang pelanggan" oninput="updatePayment()" required />
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div class="rounded-lg border border-gray-200 p-4 bg-slate-50">
@@ -87,6 +98,39 @@
                             </button>
                         </div>
                     </form>
+
+                    <div id="confirmation-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 hidden">
+                        <div class="w-full max-w-2xl rounded-3xl bg-white shadow-2xl border border-slate-200 overflow-hidden">
+                            <div class="p-6 border-b border-slate-200">
+                                <h3 class="text-xl font-semibold text-slate-900">Konfirmasi Transaksi</h3>
+                                <p class="text-sm text-slate-500 mt-1">Periksa kembali detail pembayaran sebelum memproses penjualan.</p>
+                            </div>
+                            <div class="p-6 space-y-4">
+                                <div class="grid grid-cols-2 gap-4 text-sm text-slate-700">
+                                    <div class="rounded-lg bg-slate-50 p-4">
+                                        <div class="text-slate-500">Total Belanja</div>
+                                        <div class="text-xl font-bold text-slate-900" id="confirm-total">Rp 0</div>
+                                    </div>
+                                    <div class="rounded-lg bg-slate-50 p-4">
+                                        <div class="text-slate-500">Bayar</div>
+                                        <div class="text-xl font-bold text-slate-900" id="confirm-payment">Rp 0</div>
+                                    </div>
+                                </div>
+                                <div class="rounded-lg bg-slate-50 p-4">
+                                    <div class="text-slate-500">Kembalian</div>
+                                    <div class="text-2xl font-bold text-emerald-600" id="confirm-change">Rp 0</div>
+                                </div>
+                                <div class="rounded-lg bg-slate-50 p-4">
+                                    <div class="text-slate-500">Jumlah Produk</div>
+                                    <div class="text-lg font-semibold text-slate-900" id="confirm-count">0 item</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-end gap-3 p-6 bg-slate-50 border-t border-slate-200">
+                                <button id="confirmation-cancel" type="button" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 transition">Batal</button>
+                                <button id="confirmation-confirm" type="button" class="px-4 py-2 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition">Konfirmasi & Bayar</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -132,15 +176,19 @@
             paymentAmountHidden.value = paymentValue;
             changeAmountEl.innerText = `Rp ${new Intl.NumberFormat('id-ID').format(Math.max(remaining, 0))}`;
 
-            if (cart.length > 0 && paymentValue > 0 && paymentValue < totalValue) {
+            const needsPayment = cart.length > 0 && totalValue > 0;
+            const enoughPayment = paymentValue >= totalValue;
+
+            if (needsPayment && !enoughPayment) {
                 paymentError.classList.remove('hidden');
                 checkoutBtn.disabled = true;
                 checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
             } else {
                 paymentError.classList.add('hidden');
                 if (cart.length > 0) {
-                    checkoutBtn.disabled = false;
-                    checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    checkoutBtn.disabled = !enoughPayment;
+                    checkoutBtn.classList.toggle('opacity-50', !enoughPayment);
+                    checkoutBtn.classList.toggle('cursor-not-allowed', !enoughPayment);
                 }
             }
         }
@@ -204,5 +252,44 @@
             cartTotalEl.innerText = `Rp ${new Intl.NumberFormat('id-ID').format(total)}`;
             updatePayment();
         }
+
+        function showConfirmationModal() {
+            document.getElementById('confirm-total').innerText = cartTotalEl.innerText;
+            document.getElementById('confirm-payment').innerText = `Rp ${new Intl.NumberFormat('id-ID').format(Number(paymentAmountEl.value) || 0)}`;
+            document.getElementById('confirm-change').innerText = changeAmountEl.innerText;
+            document.getElementById('confirm-count').innerText = `${cart.reduce((sum, item) => sum + item.qty, 0)} item`;
+            document.getElementById('confirmation-modal').classList.remove('hidden');
+        }
+
+        function hideConfirmationModal() {
+            document.getElementById('confirmation-modal').classList.add('hidden');
+        }
+
+        function handleCheckout(event) {
+            event.preventDefault();
+
+            const paymentValue = Number(paymentAmountEl.value) || 0;
+            const totalValue = Number(cartTotalEl.dataset.value || 0);
+            const enoughPayment = cart.length > 0 && paymentValue >= totalValue;
+
+            if (!enoughPayment) {
+                paymentError.classList.remove('hidden');
+                return;
+            }
+
+            showConfirmationModal();
+        }
+
+        const confirmationCancel = document.getElementById('confirmation-cancel');
+        const confirmationConfirm = document.getElementById('confirmation-confirm');
+        const confirmationModal = document.getElementById('confirmation-modal');
+
+        confirmationCancel.addEventListener('click', hideConfirmationModal);
+        confirmationConfirm.addEventListener('click', () => {
+            hideConfirmationModal();
+            form.submit();
+        });
+
+        form.addEventListener('submit', handleCheckout);
     </script>
 </x-app-layout>

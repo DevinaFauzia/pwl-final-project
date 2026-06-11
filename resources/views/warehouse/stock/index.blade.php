@@ -37,6 +37,9 @@
                                         Produk</th>
                                     <th
                                         class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Kategori</th>
+                                    <th
+                                        class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         Jumlah</th>
                                     <th
                                         class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -62,6 +65,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                             {{ $movement->product->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $movement->product->category->name ?? 'Tanpa Kategori' }}</td>
                                         <td
                                             class="px-6 py-4 whitespace-nowrap text-sm font-bold {{ $movement->type === 'in' ? 'text-green-600' : 'text-red-600' }}">
                                             {{ $movement->type === 'in' ? '+' : '-' }}{{ $movement->quantity }}
