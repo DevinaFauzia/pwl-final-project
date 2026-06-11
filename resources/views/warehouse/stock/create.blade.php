@@ -21,7 +21,7 @@
 
                     <form action="{{ route('warehouse.stock.store') }}" method="POST">
                         @csrf
-
+                        
                         <div class="mb-6">
                             <label for="product_id" class="block text-sm font-medium text-gray-700 mb-2">Pilih
                                 Produk</label>
@@ -37,47 +37,32 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700 mb-2">Tipe
-                                    Pergerakan</label>
-                                <select name="type" id="type"
-                                    class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm"
-                                    required>
-                                    <option value="in" {{ old('type') == 'in' ? 'selected' : '' }}>Barang Masuk (Tambah
-                                        Stok)</option>
-                                    <option value="out" {{ old('type') == 'out' ? 'selected' : '' }}>Barang Keluar
-                                        (Kurangi Stok)</option>
+                                <label for="type" class="block text-sm font-medium text-gray-700 mb-2">Tipe Pergerakan</label>
+                                <select name="type" id="type" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" required>
+                                    <option value="in" {{ old('type') == 'in' ? 'selected' : '' }}>Barang Masuk (Tambah Stok)</option>
+                                    <option value="out" {{ old('type') == 'out' ? 'selected' : '' }}>Barang Keluar (Kurangi Stok)</option>
                                 </select>
                             </div>
 
                             <div>
-                                <label for="quantity"
-                                    class="block text-sm font-medium text-gray-700 mb-2">Jumlah</label>
-                                <input type="number" name="quantity" id="quantity" value="{{ old('quantity') }}"
-                                    class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm"
-                                    required min="1">
+                                <label for="quantity" class="block text-sm font-medium text-gray-700 mb-2">Jumlah</label>
+                                <input type="number" name="quantity" id="quantity" value="{{ old('quantity') }}" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" required min="1">
                             </div>
                         </div>
 
                         <div class="mb-6">
                             <label for="date" class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
-                            <input type="date" name="date" id="date" value="{{ old('date', date('Y-m-d')) }}"
-                                class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm"
-                                required>
+                            <input type="date" name="date" id="date" value="{{ old('date', date('Y-m-d')) }}" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" required>
                         </div>
 
                         <div class="mb-6">
-                            <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">Catatan
-                                (Opsional)</label>
-                            <textarea name="notes" id="notes" rows="3"
-                                class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">{{ old('notes') }}</textarea>
+                            <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">Catatan (Opsional)</label>
+                            <textarea name="notes" id="notes" rows="3" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">{{ old('notes') }}</textarea>
                         </div>
 
                         <div class="flex items-center justify-end space-x-4 mt-8">
-                            <a href="{{ route('warehouse.stock.index') }}"
-                                class="text-gray-500 hover:text-gray-700 font-medium transition-colors">Batal</a>
-                            <button type="submit"
-                                class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition duration-300 transform hover:-translate-y-1">Simpan
-                                Stok</button>
+                            <a href="{{ route('warehouse.stock.index') }}" class="text-gray-500 hover:text-gray-700 font-medium transition-colors">Batal</a>
+                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition duration-300 transform hover:-translate-y-1">Simpan Stok</button>
                         </div>
                     </form>
                 </div>
